@@ -7,7 +7,13 @@ class PostsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "GolosText"),
+      theme: ThemeData(
+        fontFamily: "GolosText",
+        scaffoldBackgroundColor: Color.fromARGB(255, 217, 217, 217),
+        cardTheme: const CardThemeData(
+          color: Color.fromARGB(255, 217, 217, 217),
+        ),
+      ),
       home: HomePage(),
     );
   }
