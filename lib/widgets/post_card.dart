@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:posts_test/widgets/user_card.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
+  final int id;
+  final int userId;
+  final String title;
+  final String body;
+  const PostCard({
+    super.key,
+    required this.title,
+    required this.body,
+    required this.id,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +32,20 @@ class PostCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Заголовок поста",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
-                const Text("#0", style: TextStyle(fontSize: 8)),
+                Text("#$id", style: TextStyle(fontSize: 8)),
               ],
             ),
-            const Text(
-              "Текст поста... текст поста... текст поста... текст поста... текст поста... текст поста... ",
+            Text(
+              body,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
-            UserCard(),
+            UserCard(userId: userId),
           ],
         ),
       ),
