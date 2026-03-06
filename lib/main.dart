@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:posts_test/app.dart';
 
 void main() {
-  runApp(const PostsApp());
+  runApp(ProviderScope(child: const PostsApp()));
 }

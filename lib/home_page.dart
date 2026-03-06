@@ -1,30 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:posts_test/providers.dart';
 import 'package:posts_test/widgets/post_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
-  Future<List<dynamic>> fetchPosts() async {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: '',
-        headers: {
-          "User-Agent":
-              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/",
-          "Accept": "application/json, text/plain, */*",
-          "Referer": "https://site.com/",
-        },
-      ),
-    );
-    final response = await dio.get(
-      "https://jsonplaceholder.typicode.com/posts",
-    );
-    return response.data;
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final posts = ref.watch(postsProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -43,37 +27,28 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Expanded(
-                child: FutureBuilder<List<dynamic>>(
-                  future: fetchPosts(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
-
-                    if (snapshot.hasError) {
-                      return Text(
-                        "Произошла ошибка при получении данных...\n${snapshot.error}",
-                      );
-                    }
-
-                    if (!snapshot.hasData) {
-                      return const Text("Нет данных для отображения...");
-                    }
-
-                    final posts = snapshot.data!;
-                    return ListView.builder(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    ref.invalidate(postsProvider);
+                  },
+                  child: posts.when(
+                    data: (posts) => ListView.builder(
                       itemBuilder: (context, index) {
                         final post = posts[index];
                         return PostCard(
-                          title: post['title'],
-                          body: post['body'],
-                          id: post['id'],
-                          userId: post['userId'],
+                          title: post.title,
+                          body: post.body,
+                          id: post.id,
+                          userId: post.userId,
                         );
                       },
                       itemCount: posts.length,
-                    );
-                  },
+                    ),
+                    error: (error, stackTrace) => Text(
+                      "Произошла ошибка при получении данных...\n$error",
+                    ),
+                    loading: () => Center(child: CircularProgressIndicator()),
+                  ),
                 ),
               ),
             ],
