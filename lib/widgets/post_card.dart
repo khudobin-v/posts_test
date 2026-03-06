@@ -6,14 +6,11 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Card(
+      elevation: 1,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: Colors.black12, width: 1),
-        boxShadow: [
-          BoxShadow(offset: Offset(2, 2), color: Colors.black12, blurRadius: 5),
-        ],
+        side: BorderSide(color: Colors.black12, width: 1),
       ),
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -27,7 +24,7 @@ class PostCard extends StatelessWidget {
               children: [
                 const Text(
                   "Заголовок поста",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 const Text("#0", style: TextStyle(fontSize: 8)),
               ],
